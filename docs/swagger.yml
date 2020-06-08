@@ -1,0 +1,856 @@
+swagger: "2.0"
+info:
+  description: "This is the documentation for the NIMPI project"
+  version: "1.0.0"
+  title: "NIMPI"
+basePath: "/v1"
+
+tags:
+- name: "Document"
+  description: "All application documents"
+- name: "Publisher"
+  description: "Publisher responsible for publications"
+- name: "Articles"
+  description: "Articles that make up the documents"
+schemes:
+- "https"
+- "http"
+
+paths:
+
+  /document:
+    post:
+      tags:
+      - "Document"
+      summary: "Add a new document"
+      description: ""
+      operationId: "addDocument"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "List of user object"
+        required: true
+        schema:
+          type: "array"
+          items:
+            $ref: "#/definitions/Document"
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Unauthorized request, check connection parameters.
+        '500':
+          description: Internal Error Server.
+      security:
+      - admin_auth:
+        - "write:document"
+        - "read:document"
+  
+  /document/{id}:
+    get:
+      tags:
+      - "Document"
+      summary: "Finds document by term"
+      description: ""
+      operationId: "findDocumentsByID"
+      produces:
+      - "application/json"
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: integer
+          description: Find by id
+      responses:
+        '200':
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Document"
+        '401':
+          description: Unauthorized query, check the connection requirements.
+        '404':
+          description: A document with this id was not found.
+        '500':
+          description: Internal Error Server.
+    put:
+      tags:
+      - "Document"
+      summary: "Update an existing document"
+      description: ""
+      operationId: "updateDocument"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: id
+        in: "path"
+        description: "ID of document to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      - in: "body"
+        name: "body"
+        description: "Update a document's metadata"
+        required: true
+        schema:
+          $ref: "#/definitions/Document"
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Unauthorized request, check connection parameters.
+        '404':
+          description: A document with this id was not found.
+        '500':
+          description: Internal Error Server.
+      security:
+      - admin_auth:
+        - "write:document"
+        - "read:document"
+    delete:
+      tags:
+      - "Document"
+      summary: "Deletes a Document"
+      description: ""
+      operationId: "deleteDocument"
+      produces:
+      - "application/json"
+      parameters:
+      - name: id
+        in: "path"
+        description: "ID of document to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      - in: "body"
+        name: "body"
+        description: "List of user object"
+        required: true
+        schema:
+          type: "array"
+          items:
+            $ref: "#/definitions/User"
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Unauthorized request, check connection parameters.
+        '404':
+          description: A document with this id was not found.
+        '500':
+          description: Internal Error Server.
+      security:
+      - admin_auth:
+        - "write:document"
+        - "read:document"
+  /document/{id}/articles/:
+    get:
+      tags:
+      - "Document"
+      summary: "Finds articles by Document"
+      description: "Document articles"
+      operationId: "findArticlesByDocument"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of document to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        '200':
+          description: "successful operation"
+          schema:
+            $ref: '#/definitions/Articles'
+        '401':
+          description: Unauthorized query, check the connection requirements.
+        '404':
+          description: No articles were found with this id Document.
+        '500':
+          description: Internal Error Server.
+  /document/findbyterm:
+    get:
+      tags:
+      - "Document"
+      summary: "Finds document by term"
+      description: ""
+      operationId: "findDocumentsByTerm"
+      produces:
+      - "application/json"
+      parameters:
+        - in: query
+          name: term
+          required: true
+          type: string
+          format: text
+          description: Find by free terms
+      responses:
+        '200':
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Document"
+        '401':
+          description: Unauthorized query, check the connection requirements.
+        '404':
+          description: No documents were found with that term.
+        '500':
+          description: Internal Error Server.
+  
+  /document/findbymetadata:
+    get:
+      tags:
+      - "Document"
+      summary: "Finds document by metadata"
+      description: "Finds document by metadata"
+      operationId: "findDocumentsByDescripition"
+      produces:
+      - "application/json"
+      parameters:
+        - in: query
+          name: title
+          type: string
+          description: Find by title
+        - in: query
+          name: description
+          type: string
+          description: Find by description
+        - in: query
+          name: date
+          type: string
+          description: Find by date, YYYY-mm-dd
+        - in: query
+          name: year
+          type: string
+          description: Find by year, YYYY
+        - in: query
+          name: publisher_name
+          type: string
+          description: Find by publisher, data in text format
+        - in: query
+          name: type
+          type: string
+          description: Find by type
+        - in: query
+          name: dateCreated
+          type: string
+          description: Find by date created
+        - in: query
+          name: tags
+          type: string
+          description: Find by tags
+      responses:
+        '200':
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Document"
+        '401':
+          description: Unauthorized query, check the connection requirements.
+        '404':
+          description: No documents were found with that term.
+        '500':
+          description: Internal Error Server.
+          
+  /publisher:
+    post:
+      tags:
+      - "Publisher"
+      summary: "Create publisher"
+      description: "Create a publisher for documents"
+      operationId: "createPublisher"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "List of user object"
+        required: true
+        schema:
+          type: "array"
+          items:
+            $ref: "#/definitions/Publisher"
+      responses:
+        default:
+          description: "successful operation"
+      security:
+      - admin_auth:
+        - "write:document"
+        - "read:document"
+          
+  /publisher/all:
+    get:
+      tags:
+      - "Publisher"
+      summary: "List all publisher"
+      description: "Quick search method with all publishers"
+      operationId: "getPublishers"
+      produces:
+      - "application/json"
+      responses:
+        '200':
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Publisher"
+        '401':
+          description: Unauthorized request, check connection parameters.
+        '500':
+          description: Internal Error Server.
+      security:
+      - admin_auth:
+        - "write:document"
+        - "read:document"
+  /publisher/{id}:
+    get:
+      tags:
+      - "Publisher"
+      summary: "Find publisher by ID"
+      description: "Returns a single publisher"
+      operationId: "getPublisherById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of document to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      - in: "body"
+        name: "body"
+        description: "List of user object"
+        required: true
+        schema:
+          type: "array"
+          items:
+            $ref: "#/definitions/Publisher"
+      responses:
+        '200':
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Publisher"
+        '401':
+          description: Unauthorized query, check the connection requirements.
+        '404':
+          description: No publisher found with this id.
+        '500':
+          description: Internal Error Server.
+      security:
+      - admin_auth:
+        - "write:document"
+        - "read:document"
+          
+    put:
+      tags:
+      - "Publisher"
+      summary: "Updated publisher by ID"
+      description: "Returns a single publisher"
+      operationId: "putPublisherById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of document to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      - in: "body"
+        name: "body"
+        description: "List of user object"
+        required: true
+        schema:
+          type: "array"
+          items:
+            $ref: "#/definitions/Publisher"
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Unauthorized query, check the connection requirements.
+        '404':
+          description: No publisher found with this id.
+        '500':
+          description: Internal Error Server.
+      security:
+      - admin_auth:
+        - "write:document"
+        - "read:document"
+          
+    delete:
+      tags:
+      - "Publisher"
+      summary: "Delete publisher by ID"
+      description: ""
+      operationId: "deletePublisher"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of document to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      - in: "body"
+        name: "body"
+        description: "List of user object"
+        required: true
+        schema:
+          type: "array"
+          items:
+            $ref: "#/definitions/Publisher"
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Unauthorized request, check the connection requirements.
+        '404':
+          description: No publisher found with this id.
+        '500':
+          description: Internal Error Server.
+      security:
+      - admin_auth:
+        - "write:document"
+        - "read:document"
+  
+  /article:
+    post:
+      tags:
+      - "Articles"
+      summary: "Create Article"
+      description: "This can only be done by the logged in user."
+      operationId: "createArticle"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Created user object"
+        required: true
+        schema:
+          $ref: "#/definitions/Articles"
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Unauthorized request, incomplete terms or parameters not informed.
+        '500':
+          description: Internal Error Server.
+      security:
+      - admin_auth:
+        - "write:document"
+        - "read:document"
+          
+  /article/{id}:  
+    get:
+      tags:
+      - "Articles"
+      summary: "Finds articles by ID"
+      description: "Document articles"
+      operationId: "findArticlesById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of document to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        '200':
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Articles"
+        '401':
+          description: Unauthorized query, check the connection requirements.
+        '404':
+          description: No articles found with this id.
+        '500':
+          description: Internal Error Server.
+    put:
+      tags:
+      - "Articles"
+      summary: "Update an existing article"
+      description: ""
+      operationId: "updateArticle"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of document to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      - in: "body"
+        name: "body"
+        description: "Update a document's metadata"
+        required: true
+        schema:
+          $ref: "#/definitions/Articles"
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Unauthorized request, incomplete terms or parameters not informed.
+        '404':
+          description: No articles were found with that term.
+        '500':
+          description: Internal Error Server. 
+      security:
+      - admin_auth:
+        - "write:document"
+        - "read:document"
+    delete:
+      tags:
+      - "Articles"
+      summary: "Delete article by ID"
+      description: ""
+      operationId: "deleteArticle"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of document to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Unauthorized request, wrong or not informed parameters.
+        '404':
+          description: No article found with this id.
+        '500':
+          description: Internal Error Server.
+      security:
+      - admin_auth:
+        - "write:document"
+        - "read:document"
+  
+  /user:
+    post:
+      tags:
+      - "user"
+      summary: "Create user"
+      description: "This can only be done by the logged in user."
+      operationId: "createUser"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Created user object"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Unauthorized request, incomplete terms or parameters not informed.
+        '500':
+          description: Internal Error Server.
+      security:
+      - admin_auth:
+        - "write:document"
+        - "read:document"
+
+  /user/login:
+    post:
+      tags:
+      - "user"
+      summary: "Logs user into the system"
+      description: ""
+      operationId: "loginUser"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "username"
+        in: "query"
+        description: "The user name for login"
+        required: true
+        type: "string"
+      - name: "password"
+        in: "query"
+        description: "The password for login in clear text"
+        required: true
+        type: "string"
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: "string"
+          headers:
+            X-Rate-Limit:
+              type: "integer"
+              format: "int32"
+              description: "calls per hour allowed by the user"
+            X-Expires-After:
+              type: "string"
+              format: "date-time"
+              description: "date in UTC when token expires"
+        '401':
+          description: Unauthorized request, incomplete terms or parameters not informed.
+        '404':
+          description: Incorrect username or password.
+        '500':
+          description: Internal Error Server.
+  /user/all:
+    get:
+      tags:
+      - "user"
+      summary: "Get all users"
+      description: ""
+      operationId: "getAll"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "username"
+        in: "path"
+        description: ""
+        required: true
+        type: "string"
+      responses:
+        '200':
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/User"
+        '401':
+          description: Unauthorized request, check connection parameters.
+        '500':
+          description: Internal Error Server.  
+      security:
+      - admin_auth:
+        - "write:document"
+        - "read:document"
+  /user/logout:
+    get:
+      tags:
+      - "user"
+      summary: "Logs out current logged in user session"
+      description: ""
+      operationId: "logoutUser"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Unauthorized request, check connection parameters.
+        '500':
+          description: Internal Error Server.    
+          
+  /user/{id}:
+    get:
+      tags:
+      - "user"
+      summary: "Get user by id"
+      description: ""
+      operationId: "getUserById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "The name that needs to be fetched. Use user1 for testing. "
+        required: true
+        type: "string"
+      responses:
+        '200':
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/User"
+        '401':
+          description: Unauthorized request, incomplete terms or parameters not informed.
+        '404':
+          description: Incorrect username or password.
+        '500':
+          description: Internal Error Server.
+      security:
+      - admin_auth:
+        - "write:document"
+        - "read:document"
+       
+    put:
+      tags:
+      - "user"
+      summary: "Updated user"
+      description: "This can only be done by the logged in user."
+      operationId: "updateUser"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "name that need to be updated"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Updated user object"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Unauthorized request, incomplete terms or parameters not informed.
+        '404':
+          description: Incorrect username or password.
+        '500':
+          description: Internal Error Server.
+      security:
+      - admin_auth:
+        - "write:document"
+        - "read:document"
+          
+    delete:
+      tags:
+      - "user"
+      summary: "Delete user"
+      description: "This can only be done by the logged in user."
+      operationId: "deleteUser"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "The name that needs to be deleted"
+        required: true
+        type: "string"
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Unauthorized request, incomplete terms or parameters not informed.
+        '500':
+          description: Internal Error Server.
+      security:
+      - admin_auth:
+        - "write:document"
+        - "read:document"
+securityDefinitions:
+  admin_auth:
+    type: "oauth2"
+    authorizationUrl: "v1/oauth/dialog"
+    flow: "implicit"
+    scopes:
+      write:document: "can make changes to the system, read permission"
+      read:document: "can just view, can't write"
+  api_key:
+    type: "apiKey"
+    name: "api_key"
+    in: "header"   
+    
+definitions:
+  Document:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      title:
+        type: "string"
+        xml:
+          name: "tag"
+          wrapped: true
+      description:
+        type: "string"
+      date:
+        type: "string"
+        format: "date-time"
+      year:
+        type: "integer"
+      publisherId:
+        type: "integer"
+      type:
+        type: "string"
+      path:
+        type: "string"
+      dateCreated:
+        type: "string"
+        format: "date-time"
+      lastModification:
+        type: "string"
+        format: "date-time"
+      tags:
+        type: "string"
+      userId:
+        type: "integer"
+  
+  Publisher:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+        
+  Articles:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      title:
+        type: "string"
+        xml:
+          name: "tag"
+          wrapped: true
+      subtitle:
+        type: "string"
+      authors:
+        type: "array"
+        items:
+          $ref: "#/definitions/Publisher"
+      content:
+        type: "string"
+      imagesList:
+        type: "string"
+      documentId:
+        type: "integer"
+ 
+ 
+  User:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+      email:
+        type: "string"
+      password:
+        type: "string"
+      enable:
+        type: "boolean"
+        default: true
+      
+  ApiResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      type:
+        type: "string"
+      message:
+        type: "string"
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"
+  

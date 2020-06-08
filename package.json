@@ -1,0 +1,39 @@
+{
+  "name": "nimpi-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon src/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NIMPI/nimpi-api.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/NIMPI/nimpi-api/issues"
+  },
+  "homepage": "https://github.com/NIMPI/nimpi-api#readme",
+  "dependencies": {
+    "@hapi/hapi": "^19.1.1",
+    "bcrypt": "^4.0.1",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-validator": "^6.5.0",
+    "hapi": "^18.1.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.9.18",
+    "morgan": "^1.10.0",
+    "swagger-ui-express": "^4.1.4",
+    "yaml": "^1.10.0",
+    "yamljs": "^0.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
