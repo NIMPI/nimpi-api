@@ -1,11 +1,12 @@
 {
   "name": "nimpi-api",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon src/app.js"
+    "start": "nodemon src/app.js",
+    "eslint": "eslint ./src/**/*.js"
   },
   "repository": {
     "type": "git",
@@ -23,6 +24,7 @@
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
+    "eslint-config-airbnb-base": "^14.1.0",
     "express": "^4.17.1",
     "express-validator": "^6.5.0",
     "hapi": "^18.1.0",
@@ -34,6 +36,8 @@
     "yamljs": "^0.3.0"
   },
   "devDependencies": {
+    "eslint": "^7.2.0",
+    "eslint-plugin-import": "^2.21.1",
     "nodemon": "^2.0.4"
   }
 }

@@ -2,8 +2,6 @@ const express = require('express');
 const mongoose = require('mongoose');
 require('dotenv').config();
 
-const app = express();
-
 // Database
 mongoose.connect(process.env.DATABASE_CONNECTION_STRING, {
   useUnifiedTopology: true,
@@ -35,8 +33,12 @@ process.on('SIGINT', () => {
   });
 });
 
+const app = express();
+
 const port = process.env.PORT;
 app.get('/', (req, res) => res.send('Hello World!'));
 app.listen(port, () => {
   console.log(`Servidor Rodando na Porta  ${port}`);
 });
+
+module.exports
