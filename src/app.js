@@ -1,42 +1,29 @@
-const express = require('express');
-const mongoose = require('mongoose');
-require('dotenv').config();
+const express = require('express')
+const dotenv = require("dotenv").config()
+const morgan = require('morgan')
+const cors = require('cors')
 
-const app = express();
+const app = express()
 
-// Database
-mongoose.connect(process.env.DATABASE_CONNECTION_STRING, {
-  useUnifiedTopology: true,
-  useFindAndModify: true,
-  useNewUrlParser: true,
-  useCreateIndex: true,
-});
+// Import routes
+const authRoute = require('./routes/auth')
 
-const db = mongoose.connection;
+// Middlewares
+app.use(express.json())
+app.use(express.urlencoded({ extended: false }))
+app.use(cors())
+app.use(morgan('dev'))
 
-db.on('connected', () => {
-  console.log('Mongoose default connection is open');
-});
+// Routes Middlewares
+app.use('/api/v1/user', authRoute)
 
-db.on('error', (err) => {
-  console.log(`Mongoose default connection has occured \n${err}`);
-});
+// API doc
+const swaggerUi = require('swagger-ui-express')
+const YAML = require('yamljs')
+const swaggerDocument = YAML.load('./docs/swagger.yaml')
+app.use('/api/v1/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
-db.on('disconnected', () => {
-  console.log('Mongoose default connection is disconnected');
-});
-
-process.on('SIGINT', () => {
-  db.close(() => {
-    console.log(
-      'Mongoose default connection is disconnected due to application termination',
-    );
-    process.exit(0);
-  });
-});
-
-const port = process.env.PORT;
-app.get('/', (req, res) => res.send('Hello World!'));
-app.listen(port, () => {
-  console.log(`Servidor Rodando na Porta  ${port}`);
-});
+// Server
+app.listen(process.env.PORT, () => {
+    console.log(`Servidor rodando na porta ${process.env.PORT}`)
+})
