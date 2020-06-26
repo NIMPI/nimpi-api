@@ -15,13 +15,13 @@ app.use(cors())
 app.use(morgan('dev'))
 
 // Routes Middlewares
-app.use('/api/v1/user', authRoute)
+app.use('/v1/user', authRoute)
 
 // API doc
 const swaggerUi = require('swagger-ui-express')
 const YAML = require('yamljs')
 const swaggerDocument = YAML.load('./docs/swagger.yaml')
-app.use('/api/v1/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
+app.use('/v1/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
 // Server
 app.listen(process.env.PORT, () => {

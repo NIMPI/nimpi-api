@@ -26,29 +26,27 @@ exports.create = async (req, res) => {
   }
 }
 
-exports.login = (req, res) => {
-  User.findOne({ email: req.body.email })
-      .then((dados) => {
-          if (dados){
-              // Cheking if the user is already in the database
-              bcrypt.compare(req.body.password, dados.password, (err, resp) => {
-                  if (resp){
-                      jwt.sign({ email }, process.env.SECRET, { expiresIn: 86400 }, (err, token) => {
-                          res.status(200)
-                          res.json({ 'auth': true, 'token': token })
-                      })
-                  } else {
-                      res.status(403)
-                      res.json({ 'auth': false, 'message': 'Email or password is wrong' })
-                  }
-              })
-          } else {
-              res.status(404)
-              res.send({ message: 'Email or password is wrong' })
-          }
-      })
+// Login
+exports.login = async (req, res) => {
+    // Cheking if the email exists
+    const user = await User.findOne({ email: req.body.email })
+    if(!user) return res.status(400).send('Email or password is wrong')
+    // Password is correct
+    const validPass = await bcrypt.compare(req.body.password, user.password)
+    if(!validPass) return res.status(400).send('Email or password is wrong')
+
+    // Create and assign a token
+    const token = jwt.sign({ _id: user._id }, process.env.SECRET)
+    res.header('auth-token', token).send({ token: token })
 }
 
+// Logout não funciona no jwt
+exports.logout = (req, res) => {
+  if(typeof(req.session.user) != 'undefined'){
+        req.session.destroy()
+        res.redirect('/')
+  }
+}
 
 exports.verify = (req, res, next) => {
   const token = req.header['auth-token']
