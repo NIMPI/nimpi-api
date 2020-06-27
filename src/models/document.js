@@ -16,7 +16,8 @@ const documentSchema = new mongoose.Schema({
         type: Number
     },
     publisherId: {
-        type: Number
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Publisher'
     },
     type: {
         type: String
@@ -26,7 +27,7 @@ const documentSchema = new mongoose.Schema({
     },
     dataCreated: {
         type: Date,
-        required: true
+        default: Date.now()
     },
     lastModification: {
         type: Date,
@@ -36,9 +37,9 @@ const documentSchema = new mongoose.Schema({
         type: String
     },
     userId: {
-        type: Schema.Types.ObjectId,
-        ref: 'user',
-        required: true
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        //required: true
     }
 })
 

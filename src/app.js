@@ -15,7 +15,7 @@ app.use(cors())
 app.use(morgan('dev'))
 
 // Routes Middlewares
-app.use('/v1/user', authRoute)
+app.use('/v1', authRoute)
 
 // API doc
 const swaggerUi = require('swagger-ui-express')
