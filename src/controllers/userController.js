@@ -26,7 +26,7 @@ exports.create = async (req, res) => {
 
   exports.userAll = async (req, res) => {
     try {
-        const user = await User.find()
+        const user = await User.find({}, {password:0})
 
         return res.send({ user })
     } catch (error) {
