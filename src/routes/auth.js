@@ -1,15 +1,7 @@
-const router = require('express').Router()
-const authController = require('../controllers/authController')
-const documentController = require('../controllers/documentController')
-const userController = require('../controllers/userController')
+const router = require('express').Router();
+const authController = require('../controllers/authController');
 
-router.post('/user', userController.create)
-router.get('/user/all', userController.userAll)
-
-router.post('/user/login', authController.login)
-router.get('/user/logout', authController.logout)
-
-router.post('/document', documentController.insert)
-router.get('/document/all', documentController.listId)
+// Login de usuário
+router.post('/user/login', authController.login);
 
 module.exports = router
