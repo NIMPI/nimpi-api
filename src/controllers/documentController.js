@@ -8,15 +8,17 @@ exports.uploadFile = async (req, res) => {
     // Define nome de algumas variáveis
     const { originalname: name, size, key, location: url = '' } = req.file;
     title = name;
+    path = url;
+    
     // Criando novo registro no banco de dados
     const document = await Document.create({
       title,
       description: req.body.description,
       date: req.body.date,
       year: req.body.year,
-      size,
+      userId: req.userId,
       key,
-      url
+      path
     });
     return res.json(document);
   } catch (error) {
@@ -27,7 +29,7 @@ exports.uploadFile = async (req, res) => {
 // Busca por termo
 exports.findByTerm = async (req, res, next) => {
   try {
-    const urlParameter = req.params.name;
+    const urlParameter = req.query.term;
 
     const document = await Document.find({ title: { $regex: urlParameter } })
     
