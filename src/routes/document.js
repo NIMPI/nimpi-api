@@ -7,7 +7,7 @@ const multerConfig = require('../config/multer');
 const upload = multer(multerConfig);
 
 // Upload de arquivos
-router.post('/document', authController.verification, upload.single('file'), documentController.uploadFile);
+router.post('/document', authController.verification, upload.single('path'), documentController.uploadFile);
 
 // Busca por termo
 router.get('/document/findbyterm', documentController.findByTerm);
