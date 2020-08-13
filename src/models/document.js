@@ -14,7 +14,7 @@ const documentSchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    //required: true
+    required: true
   },
   date: {
     type: Date
@@ -46,23 +46,17 @@ const documentSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    //required: true
-  },
-  size: {
-    type: Number
+    required: true
   },
   key: {
-    type: String
-  },
-  url: {
     type: String
   }
 });
 
 // Preenche a url antes de salvar
 documentSchema.pre('save', function() {
-  if (!this.url) {
-    this.url = `${process.env.APP_URL}/files/${this.key}`;
+  if (!this.path) {
+    this.path = `${process.env.APP_URL}/files/${this.key}`;
   }
 });
 
