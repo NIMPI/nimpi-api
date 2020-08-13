@@ -12,7 +12,7 @@ exports.uploadFile = async (req, res) => {
     
     // Criando novo registro no banco de dados
     const document = await Document.create({
-      title,
+      title: req.body.title,
       description: req.body.description,
       date: req.body.date,
       year: req.body.year,
@@ -38,3 +38,13 @@ exports.findByTerm = async (req, res, next) => {
     return res.status(400).send({ error: 'Error searching for document' });
   }
 }
+
+/* 
+exports.update = async (req, res) => {
+  try {
+    const { title, description, date, year, publisherId,  }
+  } catch (error) {
+    
+  }
+};
+*/
