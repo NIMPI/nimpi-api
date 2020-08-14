@@ -38,3 +38,5 @@ exports.findByTerm = async (req, res, next) => {
     return res.status(400).send({ error: 'Error searching for document' });
   }
 }
+
+// Alterar documentos
