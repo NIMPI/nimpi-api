@@ -25,10 +25,10 @@ exports.login = async (req, res) => {
 };
 
 exports.verification = (req, res, next) => {
-  const authHeader = req.headers.authorization;
+  const authHeader = req.body.token || req.query.token || req.headers.token || req.headers.authorization || req.headers['access-token'];
 
   if (!authHeader)
-    return res.status(401).send({ error: 'Sem token' });
+    return res.status(401).send({ error: 'No token ' });
 
   const parts = authHeader.split(' ');
 

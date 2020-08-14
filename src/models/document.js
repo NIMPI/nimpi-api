@@ -14,7 +14,7 @@ const documentSchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    required: true
+    //required: true
   },
   date: {
     type: Date
@@ -40,13 +40,13 @@ const documentSchema = new mongoose.Schema({
     type: Date,
     default: Date.now()
   },
-  tags: {
-    type: String
-  },
+  tags: [
+    String
+  ],
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    //required: true
+    required: true
   },
   key: {
     type: String

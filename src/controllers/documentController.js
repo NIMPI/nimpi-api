@@ -1,24 +1,24 @@
 const multer = require('multer');
 const multerConfig = require('../config/multer');
-const Document = require('../models/document');
+const Document = require('../models/Document');
 
 // Uploado de arquivos
 exports.uploadFile = async (req, res) => {
   try {
     // Define nome de algumas variáveis
     const { originalname: name, size, key, location: url = '' } = req.file;
-    title = name;
-    path = url;
-    
+        
     // Criando novo registro no banco de dados
     const document = await Document.create({
-      title,
+      title: req.body.title || name,
       description: req.body.description,
+      tags: req.body.tags,
       date: req.body.date,
       year: req.body.year,
+      type: req.body.type,
       userId: req.userId,
       key,
-      path
+      path: url
     });
     return res.json(document);
   } catch (error) {
