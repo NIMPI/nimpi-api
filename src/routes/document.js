@@ -12,4 +12,7 @@ router.post('/document', authController.verification, upload.single('path'), doc
 // Busca por termo
 router.get('/document/findbyterm', documentController.findByTerm);
 
+// Alterar documento
+router.put('/document/:id', authController.verification, documentController.updateFile);
+
 module.exports = router

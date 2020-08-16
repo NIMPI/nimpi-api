@@ -32,9 +32,8 @@ const documentSchema = new mongoose.Schema({
   path: {
     type: String
   },
-  dataCreated: {
-    type: Date,
-    default: Date.now()
+  dateCreated: {
+    type: Date
   },
   lastModification: {
     type: Date,

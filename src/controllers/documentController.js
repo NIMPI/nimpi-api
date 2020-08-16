@@ -1,22 +1,23 @@
-const multer = require('multer');
-const multerConfig = require('../config/multer');
 const Document = require('../models/Document');
 
 // Upload de arquivos
 exports.uploadFile = async (req, res) => {
   try {
-    // Define nome de algumas variáveis
+    // Implementa as variáveis com dados do body
+    const {description, date, year, type, tags} = req.body;
+    // Implementa as variáveis com dados do arquivo original
     const { originalname: name, size, key, location: url = '' } = req.file;
         
     // Criando novo registro no banco de dados
     const document = await Document.create({
       title: req.body.title || name,
-      description: req.body.description,
-      tags: req.body.tags,
-      date: req.body.date,
-      year: req.body.year,
-      type: req.body.type,
+      description,
+      tags,
+      date,
+      year,
+      type,
       userId: req.userId,
+      dateCreated: Date.now(),
       key,
       path: url
     });
@@ -29,6 +30,7 @@ exports.uploadFile = async (req, res) => {
 // Busca por termo
 exports.findByTerm = async (req, res, next) => {
   
+  // Converte os acentos em letras simples
   function diacriticSensitiveRegex(string = '') {
     return string.replace(/a/g, '[a,á,à,ã,â,ä]')
       .replace(/e/g, '[e,é,ë,è,ê,ẽ]')
@@ -36,16 +38,17 @@ exports.findByTerm = async (req, res, next) => {
       .replace(/o/g, '[o,ó,ö,ò,õ,ô]')
       .replace(/u/g, '[u,ü,ú,ù,ũ,û]')
       .replace(/c/g, '[c,ç]');
-  }
+  };
   
   try {
     const urlParameter = req.query.term;
 
-  //  const document = await Document.find({ title: { $regex: urlParameter, $options: 'i' } })
-  //  const document = await Document.find({ title: { $regex: diacriticSensitiveRegex(urlParameter), $options: 'i' } })
-    const document = await Document.find({ tags: { $regex: diacriticSensitiveRegex(urlParameter), $options: 'i' } })
+    // Realiza a busca no banco de dados
+    //const document = await Document.find({ title: { $regex: urlParameter, $options: 'i' } });
+    const document = await Document.find({ title: { $regex: diacriticSensitiveRegex(urlParameter), $options: 'i' } });
+    //const document = await Document.find({ tags: { $regex: diacriticSensitiveRegex(urlParameter), $options: 'i' } });
   
-
+    // Validação de dados não vazios
     if (Object.keys(document).length === 0)
       return res.status(404).send({ error: 'No documents were found with that term' });
     else
@@ -54,7 +57,26 @@ exports.findByTerm = async (req, res, next) => {
   } catch (err) {
     return res.status(400).send({ error: 'Error searching for document' });
   }
-}
+};
 
 // Alterar documentos
-
+exports.updateFile = async (req, res) => {
+  try {
+    // Define as variáveis com dados do body
+    const {title, description, date, year, type, tags} = req.body;
+    // Busca por Id e altera os dados do documento
+    const document = await Document.findByIdAndUpdate(req.params.id, {
+      title,
+      description,
+      date,
+      year,
+      type,
+      tags,
+      userId: req.userId,
+      lastModification: Date.now()
+    }, { new: true });
+    return res.json(document);
+  } catch (error) {
+    return res.status(404).send({ error: 'A document with this id was not found:' + error });
+  }
+};
