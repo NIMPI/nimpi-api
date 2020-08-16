@@ -49,7 +49,11 @@ const documentSchema = new mongoose.Schema({
   },
   key: {
     type: String
-  }
+  },
+  articles: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Article'
+  }]
 });
 
 // Preenche a url antes de salvar

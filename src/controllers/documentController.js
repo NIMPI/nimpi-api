@@ -1,4 +1,5 @@
 const Document = require('../models/Document');
+const Article = require('../models/Article');
 
 // Upload de arquivos
 exports.uploadFile = async (req, res) => {
@@ -21,6 +22,17 @@ exports.uploadFile = async (req, res) => {
       key,
       path: url
     });
+
+    await Promise.all(articles.map(async article => {
+      const documentArticle = new Article({ ...article, document: document._id });
+
+      await documentArticle.save();
+
+      document.articles.push(documentArticle);
+    }));
+
+    await document.save();
+
     return res.json(document);
   } catch (error) {
     return res.status(400).send({ error: 'Error creating new document' });
