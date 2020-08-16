@@ -3,7 +3,6 @@ require('dotenv').config();
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
-const multer = require('multer');
 const path = require('path');
 
 const app = express();
