@@ -23,7 +23,11 @@ const storageTypes = {
 }),
   // Configurações de destino externo
   s3: multerS3({
-    s3: new aws.S3(),
+    s3: new aws.S3({
+      accessKeyId: process.env.AWS_ACESS_KEY_ID,
+      secretAcessKey: process.env.AWS_SECRET_ACESS_KEY,
+      defaultRegion: process.env.AWS_DEFAULT_REGION
+    }),
     bucket: process.env.BUCKET_NAME,
     // Torna o arquivo legível pelo navegador
     contentType: multerS3.AUTO_CONTENT_TYPE,

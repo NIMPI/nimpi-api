@@ -38,13 +38,12 @@ exports.findByTerm = async (req, res, next) => {
       .replace(/o/g, '[o,ó,ö,ò,õ,ô]')
       .replace(/u/g, '[u,ü,ú,ù,ũ,û]')
       .replace(/c/g, '[c,ç]');
-  };
-  
+  };  
   try {
     const urlParameter = req.query.term;
 
+
     // Realiza a busca no banco de dados
-    //const document = await Document.find({ title: { $regex: urlParameter, $options: 'i' } });
     const document = await Document.find({ title: { $regex: diacriticSensitiveRegex(urlParameter), $options: 'i' } });
     //const document = await Document.find({ tags: { $regex: diacriticSensitiveRegex(urlParameter), $options: 'i' } });
   
