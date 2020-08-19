@@ -23,19 +23,9 @@ exports.uploadFile = async (req, res) => {
       path: url
     });
 
-    await Promise.all(articles.map(async article => {
-      const documentArticle = new Article({ ...article, document: document._id });
-
-      await documentArticle.save();
-
-      document.articles.push(documentArticle);
-    }));
-
-    await document.save();
-
-    return res.json(document);
+    return res.json(document + console.log(document));
   } catch (error) {
-    return res.status(400).send({ error: 'Error creating new document' });
+    return res.status(400).send({ error: 'Error creating new document ' + console.log(error) });
   }
 };
 
@@ -61,12 +51,12 @@ exports.findByTerm = async (req, res, next) => {
   
     // Validação de dados não vazios
     if (Object.keys(document).length === 0)
-      return res.status(404).send({ error: 'No documents were found with that term' });
+      return res.status(404).send({ error: 'No documents were found with that term ' + console.log(error) });
     else
-      return res.json(document);
+      return res.json(document + console.log(document));
 
   } catch (err) {
-    return res.status(400).send({ error: 'Error searching for document' });
+    return res.status(400).send({ error: 'Error searching for document ' + console.log(err) });
   }
 };
 
@@ -86,8 +76,8 @@ exports.updateFile = async (req, res) => {
       userId: req.userId,
       lastModification: Date.now()
     }, { new: true });
-    return res.json(document);
+    return res.json(document + console.log(document));
   } catch (error) {
-    return res.status(404).send({ error: 'A document with this id was not found:' + error });
+    return res.status(404).send({ error: 'A document with this id was not found:' + console.log(error) });
   }
 };
