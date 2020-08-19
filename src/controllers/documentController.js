@@ -1,5 +1,6 @@
 const Document = require('../models/Document');
 const Article = require('../models/Article');
+const multer = require('multer');
 
 // Upload de arquivos
 exports.uploadFile = async (req, res) => {
@@ -55,8 +56,8 @@ exports.findByTerm = async (req, res, next) => {
     else
       return res.json(document + console.log(document));
 
-  } catch (err) {
-    return res.status(400).send({ error: 'Error searching for document ' + console.log(err) });
+  } catch (error) {
+    return res.status(400).send({ error: 'Error searching for document ' + console.log(error) });
   }
 };
 
@@ -78,6 +79,6 @@ exports.updateFile = async (req, res) => {
     }, { new: true });
     return res.json(document + console.log(document));
   } catch (error) {
-    return res.status(404).send({ error: 'A document with this id was not found:' + console.log(error) });
+    return res.status(404).send({ error: 'A document with this id was not found: ' + console.log(error) });
   }
 };
