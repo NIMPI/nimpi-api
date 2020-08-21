@@ -82,3 +82,27 @@ exports.updateFile = async (req, res) => {
     return res.status(404).send({ error: 'A document with this id was not found: ' + console.log(error) });
   }
 };
+
+// Busca por Id
+exports.findById = async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const document = await Document.findById(id);
+
+    return res.json(document);
+  } catch (error) {
+    return res.status(404).send({ error: 'A document with this id was not found' + console.log(document) });
+  }
+};
+
+// Busca todos os documentos
+exports.findAll = async (req, res) => {
+  try {
+    const document = await Document.find();
+
+    return res.json(document);
+  } catch (error) {
+    return res.status(404).send({ error: 'A document with this id was not found' + console.log(document) });
+  }
+};
