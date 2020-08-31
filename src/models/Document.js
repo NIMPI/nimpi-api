@@ -10,7 +10,7 @@ const s3 = new aws.S3();
 const documentSchema = new mongoose.Schema({
   title: {
     type: String,
-    required: true
+    //required: true
   },
   description: {
     type: String,
@@ -45,7 +45,7 @@ const documentSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: true
+    //required: true
   },
   key: {
     type: String

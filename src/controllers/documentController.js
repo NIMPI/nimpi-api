@@ -1,3 +1,4 @@
+const express = require('express');
 const Document = require('../models/Document');
 const Article = require('../models/Article');
 
@@ -5,7 +6,7 @@ const Article = require('../models/Article');
 exports.uploadFile = async (req, res) => {
   try {
     // Implementa as variáveis com dados do body
-    const {description, date, year, type, tags} = req.body;
+    const { description, date, year, type, tags, articles } = req.body;
     // Implementa as variáveis com dados do arquivo original
     const { originalname: name, size, key, location: url = '' } = req.file;
         
@@ -23,19 +24,25 @@ exports.uploadFile = async (req, res) => {
       path: url
     });
 
-    await Promise.all(articles.map(async article => {
-      const documentArticle = new Article({ ...article, document: document._id });
+    if(req.body.articles != null){
+      await Promise.all(articles.map(async article => {
+        const documentArticle = new Article({ 
+          ...article,
+          documentId: document._id 
+        });
 
-      await documentArticle.save();
+        await documentArticle.save();
 
-      document.articles.push(documentArticle);
-    }));
+        document.articles.push(documentArticle);
+      }))
+  };
 
     await document.save();
 
     return res.json(document);
   } catch (error) {
-    return res.status(400).send({ error: 'Error creating new document' });
+    //return res.status(400).send({ error: 'Error creating new document' });
+    console.log(error);
   }
 };
 
@@ -56,7 +63,7 @@ exports.findByTerm = async (req, res, next) => {
 
 
     // Realiza a busca no banco de dados
-    const document = await Document.find({ title: { $regex: diacriticSensitiveRegex(urlParameter), $options: 'i' } });
+    const document = await Document.find({ title: { $regex: diacriticSensitiveRegex(urlParameter), $options: 'i' } }).populate('userId');
     //const document = await Document.find({ tags: { $regex: diacriticSensitiveRegex(urlParameter), $options: 'i' } });
   
     // Validação de dados não vazios
