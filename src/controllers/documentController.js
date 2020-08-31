@@ -63,17 +63,17 @@ exports.findByTerm = async (req, res, next) => {
 
 
     // Realiza a busca no banco de dados
-    const document = await Document.find({ title: { $regex: diacriticSensitiveRegex(urlParameter), $options: 'i' } }).populate('userId');
+    const document = await Document.find({ title: { $regex: diacriticSensitiveRegex(urlParameter), $options: 'i' } });
     //const document = await Document.find({ tags: { $regex: diacriticSensitiveRegex(urlParameter), $options: 'i' } });
   
     // Validação de dados não vazios
     if (Object.keys(document).length === 0)
-      return res.status(404).send({ error: 'No documents were found with that term' });
+      return res.status(404).send({ error: 'No documents were found with that term ' + console.log(error) });
     else
-      return res.json(document);
+      return res.json(document + console.log(document));
 
-  } catch (err) {
-    return res.status(400).send({ error: 'Error searching for document' });
+  } catch (error) {
+    return res.status(400).send({ error: 'Error searching for document ' + console.log(error) });
   }
 };
 
@@ -93,8 +93,32 @@ exports.updateFile = async (req, res) => {
       userId: req.userId,
       lastModification: Date.now()
     }, { new: true });
+    return res.json(document + console.log(document));
+  } catch (error) {
+    return res.status(404).send({ error: 'A document with this id was not found: ' + console.log(error) });
+  }
+};
+
+// Busca por Id
+exports.findById = async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const document = await Document.findById(id);
+
     return res.json(document);
   } catch (error) {
-    return res.status(404).send({ error: 'A document with this id was not found:' + error });
+    return res.status(404).send({ error: 'A document with this id was not found' + console.log(document) });
+  }
+};
+
+// Busca todos os documentos
+exports.findAll = async (req, res) => {
+  try {
+    const document = await Document.find();
+
+    return res.json(document);
+  } catch (error) {
+    return res.status(404).send({ error: 'A document with this id was not found' + console.log(document) });
   }
 };
