@@ -9,7 +9,8 @@ exports.uploadFile = async (req, res) => {
     const { description, date, year, type, tags, articles } = req.body;
     // Implementa as variáveis com dados do arquivo original
     const { originalname: name, size, key, location: url = '' } = req.file;
-        
+    // Convertendo tamanho do arquivo
+    const tamanho = (size / 1048576)
     // Criando novo registro no banco de dados
     const document = await Document.create({
       title: req.body.title || name,
@@ -21,7 +22,8 @@ exports.uploadFile = async (req, res) => {
       userId: req.userId,
       dateCreated: Date.now(),
       key,
-      path: url
+      path: url,
+      size: tamanho.toFixed(2)
     });
 
     if(req.body.articles != null){
