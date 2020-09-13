@@ -82,6 +82,7 @@ module.exports = {
 
       'application/pdf'
     ];
+    
     // Verifica se o mimetype do arquivo está na lista acima
     if (allowedMimes.includes(file.mimetype)) {
       cb(null, true);

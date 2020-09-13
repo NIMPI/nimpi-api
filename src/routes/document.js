@@ -12,6 +12,9 @@ router.post('/document', authController.verification, upload.single('path'), doc
 // Busca por termo
 router.get('/document/findbyterm', documentController.findByTerm);
 
+// Busca por Id
+router.get('/document/:id', documentController.findById);
+
 // Busca todos
 router.get('/document', documentController.findAll);
 
