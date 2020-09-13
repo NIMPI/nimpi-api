@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate-v2');
 const aws = require('aws-sdk');
 const fs = require('fs');
 const path = require('path');
@@ -53,7 +54,10 @@ const documentSchema = new mongoose.Schema({
   articles: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Article'
-  }]
+  }],
+size: {
+  type: Number
+}
 });
 
 // Preenche a url antes de salvar
@@ -86,5 +90,7 @@ documentSchema.pre('remove', function() {
     );
   }
 });
+
+documentSchema.plugin(mongoosePaginate);
 
 module.exports = mongoose.model("Document", documentSchema);

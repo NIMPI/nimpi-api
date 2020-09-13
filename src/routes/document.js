@@ -15,7 +15,7 @@ router.get('/document/findbyterm', documentController.findByTerm);
 // Busca por Id
 router.get('/document/:id', documentController.findById);
 
-// Busca all
+// Busca todos
 router.get('/document', documentController.findAll);
 
 // Update de arquivos
