@@ -127,3 +127,17 @@ exports.findAll = async (req, res) => {
   }
 };
 
+// Deletar documentos
+exports.deleteDocument = async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    await Document.findByIdAndRemove(id);
+    // Deleta o artigo relacionado ao documento
+    await Article.remove({ documentId: id });
+
+    return res.send();
+  } catch (error) {
+    return res.status(404).send({ error: 'No document found with this id' + console.log(error) });
+  }
+};
