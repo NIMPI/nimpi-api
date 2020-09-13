@@ -44,8 +44,7 @@ exports.uploadFile = async (req, res) => {
 
     return res.json(document);
   } catch (error) {
-    //return res.status(400).send({ error: 'Error creating new document' });
-    console.log(error);
+    return res.status(400).send({ error: 'Error creating new document' });
   }
 };
 
@@ -67,8 +66,7 @@ exports.findByTerm = async (req, res, next) => {
     const page = parseInt(req.query.page, 10) || 1;
 
     // Realiza a busca no banco de dados
-    const document = await Document.find({ title: { $regex: diacriticSensitiveRegex(urlParameter), $options: 'i' } }, { limit, page });
-    //const document = await Document.find({ tags: { $regex: diacriticSensitiveRegex(urlParameter), $options: 'i' } });
+    const document = await Document.paginate({ title: { $regex: diacriticSensitiveRegex(urlParameter), $options: 'i' } }, { limit, page });
   
     // Validação de dados não vazios
     if (Object.keys(document).length === 0)
@@ -115,19 +113,6 @@ exports.findById = async (req, res) => {
     return res.status(404).send({ error: 'A document with this id was not found' + console.log(document) });
   }
 };
-
-/*
-// Busca todos os documentos
-exports.findAll = async (req, res) => {
-  try {
-    const document = await Document.find();
-
-    return res.json(document);
-  } catch (error) {
-    return res.status(404).send({ error: 'A document with this id was not found' + console.log(document) });
-  }
-}; 
-*/
 
 // Busca todos os documentos paginado
 exports.findAll = async (req, res) => {
