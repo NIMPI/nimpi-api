@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate-v2');
 const aws = require('aws-sdk');
 const fs = require('fs');
 const path = require('path');
@@ -89,5 +90,7 @@ documentSchema.pre('remove', function() {
     );
   }
 });
+
+documentSchema.plugin(mongoosePaginate);
 
 module.exports = mongoose.model("Document", documentSchema);

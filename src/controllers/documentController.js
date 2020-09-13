@@ -9,9 +9,9 @@ exports.uploadFile = async (req, res) => {
     const { description, date, year, type, tags, articles } = req.body;
     // Implementa as variáveis com dados do arquivo original
     const { originalname: name, size, key, location: url = '' } = req.file;
-    // Convertendo tamanho do arquivo
+    // Converte tamanho do arquivo
     const tamanho = (size / 1048576)
-    // Criando novo registro no banco de dados
+    // Cria novo registro no banco de dados
     const document = await Document.create({
       title: req.body.title || name,
       description,
@@ -26,6 +26,7 @@ exports.uploadFile = async (req, res) => {
       size: tamanho.toFixed(2)
     });
 
+    // Cria artigo referenciado no documento
     if(req.body.articles != null){
       await Promise.all(articles.map(async article => {
         const documentArticle = new Article({ 
@@ -62,10 +63,11 @@ exports.findByTerm = async (req, res, next) => {
   };  
   try {
     const urlParameter = req.query.term;
-
+    const limit = parseInt(req.query.limit, 10) || 10;
+    const page = parseInt(req.query.page, 10) || 1;
 
     // Realiza a busca no banco de dados
-    const document = await Document.find({ title: { $regex: diacriticSensitiveRegex(urlParameter), $options: 'i' } });
+    const document = await Document.find({ title: { $regex: diacriticSensitiveRegex(urlParameter), $options: 'i' } }, { limit, page });
     //const document = await Document.find({ tags: { $regex: diacriticSensitiveRegex(urlParameter), $options: 'i' } });
   
     // Validação de dados não vazios
@@ -114,6 +116,7 @@ exports.findById = async (req, res) => {
   }
 };
 
+/*
 // Busca todos os documentos
 exports.findAll = async (req, res) => {
   try {
@@ -123,4 +126,19 @@ exports.findAll = async (req, res) => {
   } catch (error) {
     return res.status(404).send({ error: 'A document with this id was not found' + console.log(document) });
   }
+}; 
+*/
+
+// Busca todos os documentos paginado
+exports.findAll = async (req, res) => {
+  try {
+    const limit = parseInt(req.query.limit, 10) || 10;
+    const page = parseInt(req.query.page, 10) || 1;
+    const document = await Document.paginate({}, { limit, page });
+
+    return res.json(document);
+  } catch (error) {
+    return res.status(404).send({ error: 'A document with this id was not found' + console.log(document) });
+  }
 };
+
