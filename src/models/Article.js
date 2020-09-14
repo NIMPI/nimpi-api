@@ -1,5 +1,6 @@
 //const mongoose = require('mongoose');
 const mongoose = require('../database/connection');
+const mongoosePaginate = require('mongoose-paginate-v2');
 
 const ArticleSchema = new mongoose.Schema({
   title: {
@@ -23,6 +24,8 @@ const ArticleSchema = new mongoose.Schema({
     ref: 'Document',
     require: true
   }
-})
+});
+
+ArticleSchema.plugin(mongoosePaginate);
 
 module.exports = mongoose.model("Article", ArticleSchema);

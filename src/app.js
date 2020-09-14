@@ -9,7 +9,10 @@ const app = express();
 
 // Importa as rotas
 const authRoute = require('./routes/auth');
+const userRoute = require('./routes/user');
 const documentRoute = require('./routes/document');
+const articleRoute = require('./routes/article');
+const publisherRoute = require('./routes/publisher')
 
 // Middlewares
 app.use(express.json());
@@ -28,7 +31,10 @@ const api_version = process.env.API_VERSION;
 
 // Rota dos Middlewares
 app.use(`/${api_version}`, authRoute);
+app.use(`/${api_version}`, userRoute);
 app.use(`/${api_version}`, documentRoute);
+app.use(`/${api_version}`, articleRoute);
+app.use(`/${api_version}`, publisherRoute);
 
 // API doc
 const swaggerUi = require('swagger-ui-express');

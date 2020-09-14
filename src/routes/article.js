@@ -2,7 +2,7 @@ const router = require('express').Router();
 const authController = require('../controllers/authController');
 const articleController = require('../controllers/articleController');
 
-router.post('/article', authController.verification, articleController);
+//router.post('/article', authController.verification, articleController);
 
 // Busca por termo
 router.get('/article/findbyterm', articleController.findByTerm);
