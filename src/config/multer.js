@@ -4,6 +4,7 @@ const crypto = require('crypto');
 const aws = require('aws-sdk');
 const multerS3 = require('multer-s3');
 
+// Configurações de salvamento de arquivo
 const storageTypes = {
   // Configurações de destino local
   local: multer.diskStorage({

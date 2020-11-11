@@ -2,8 +2,6 @@ const router = require('express').Router();
 const authController = require('../controllers/authController');
 const articleController = require('../controllers/articleController');
 
-router.post('/article', authController.verification, articleController);
-
 // Busca por termo
 router.get('/article/findbyterm', articleController.findByTerm);
 
@@ -19,4 +17,4 @@ router.put('/article/:id', authController.verification, articleController.update
 // Delete artigos
 router.delete('/article/:id', authController.verification, articleController.deleteArticle);
 
-module.exports = router
+module.exports = router;

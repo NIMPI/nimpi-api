@@ -1,6 +1,6 @@
 {
   "name": "nimpi-api",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "",
   "main": "app.js",
   "scripts": {
@@ -29,9 +29,7 @@
     "mongoose-paginate-v2": "^1.3.9",
     "morgan": "^1.10.0",
     "multer": "^1.4.2",
-    "multer-s3": "^2.9.0",
-    "swagger-ui-express": "^4.1.4",
-    "yamljs": "^0.3.0"
+    "multer-s3": "^2.9.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.4"
