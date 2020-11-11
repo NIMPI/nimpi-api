@@ -24,6 +24,7 @@ const userSchema = new mongoose.Schema({
   }
 });
 
+// Plugin de paginação
 userSchema.plugin(mongoosePaginate);
 
 module.exports = mongoose.model('User', userSchema);

@@ -83,14 +83,10 @@ documentSchema.pre('remove', function() {
       .catch(response => {
         console.log(response.status);
       });
-  // Deleta o arquivo local
-  } else {
-    return promisify(fs.unlink)(
-      path.resolve(__dirname, '..', '..', 'tmp', 'uploads', this.key)
-    );
-  }
+  } 
 });
 
+// Plugin de paginação
 documentSchema.plugin(mongoosePaginate);
 
 module.exports = mongoose.model("Document", documentSchema);

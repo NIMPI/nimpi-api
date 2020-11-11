@@ -12,4 +12,4 @@ mongoose.connect(process.env.DB_CONNECT, {
     console.log('Connected to DB!');
   });
 
-module.exports = mongoose
+module.exports = mongoose;

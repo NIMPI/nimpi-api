@@ -36,12 +36,6 @@ app.use(`/${api_version}`, documentRoute);
 app.use(`/${api_version}`, articleRoute);
 app.use(`/${api_version}`, publisherRoute);
 
-// API doc
-const swaggerUi = require('swagger-ui-express');
-const YAML = require('yamljs');
-const swaggerDocument = YAML.load('./docs/swagger.yaml');
-app.use(`/${api_version}/docs`, swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-
 // Server
 app.listen(process.env.PORT, () => {
   console.log(`Servidor rodando na porta ${process.env.PORT}`);

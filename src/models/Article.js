@@ -1,7 +1,7 @@
-//const mongoose = require('mongoose');
 const mongoose = require('../database/connection');
 const mongoosePaginate = require('mongoose-paginate-v2');
 
+// Schema de artigos
 const ArticleSchema = new mongoose.Schema({
   title: {
     type: String,
@@ -26,6 +26,7 @@ const ArticleSchema = new mongoose.Schema({
   }
 });
 
+// Plugin de paginação
 ArticleSchema.plugin(mongoosePaginate);
 
 module.exports = mongoose.model("Article", ArticleSchema);

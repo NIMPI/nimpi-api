@@ -17,4 +17,4 @@ router.put('/user/:id', authController.verification, userController.updateUser);
 // Deletar usuário
 router.delete('/user/:id', authController.verification, userController.deleteUser);
 
-module.exports = router
+module.exports = router;

@@ -13,7 +13,9 @@ exports.findByTerm = async (req, res, next) => {
       .replace(/c/g, '[c,ç]');
   };  
   try {
+    // Recebe o parâmetro
     const urlParameter = req.query.term;
+    // Pagina o resultado
     const limit = parseInt(req.query.limit, 10) || 10;
     const page = parseInt(req.query.page, 10) || 1;
 
@@ -22,12 +24,12 @@ exports.findByTerm = async (req, res, next) => {
   
     // Validação de dados não vazios
     if (Object.keys(article).length === 0)
-      return res.status(404).send({ error: 'No articles were found with that term ' + console.log(error) });
+      return res.status(404).send({ error: 'No articles were found with that term' });
     else
-      return res.json(article + console.log(article));
+      return res.json(article);
 
   } catch (error) {
-    return res.status(400).send({ error: 'Error searching for article ' + console.log(error) });
+    return res.status(400).send({ error: 'Error searching for article' });
   }
 };
 
@@ -45,47 +47,54 @@ exports.updateArticle = async (req, res) => {
       imageList,
       documentId
     }, { new: true });
-    return res.json(article + console.log(article));
+    return res.json(article);
   } catch (error) {
-    return res.status(404).send({ error: 'A article with this id was not found: ' + console.log(error) });
+    return res.status(404).send({ error: 'A article with this id was not found' });
   }
 };
 
 // Busca por Id
 exports.findById = async (req, res) => {
+  // Recebe o parâmetro
   const id = req.params.id;
 
   try {
+    // Busca o artigo pelo Id
     const article = await Article.findById(id);
 
     return res.json(article);
   } catch (error) {
-    return res.status(404).send({ error: 'A article with this id was not found' + console.log(article) });
+    return res.status(404).send({ error: 'A article with this id was not found' });
   }
 };
 
 // Busca todos os artigos paginado
 exports.findAll = async (req, res) => {
   try {
+    // Pagina o resultado
     const limit = parseInt(req.query.limit, 10) || 10;
     const page = parseInt(req.query.page, 10) || 1;
+
+    // Retorna o resultado paginado
     const article = await Article.paginate({}, { limit, page });
 
     return res.json(article);
   } catch (error) {
-    return res.status(404).send({ error: 'A article with this id was not found' + console.log(article) });
+    return res.status(404).send({ error: 'A article with this id was not found' });
   }
 };
 
 // Deletar artigos
 exports.deleteArticle = async (req, res) => {
+  // Recebe o parâmetro Id
   const id = req.params.id;
 
   try {
+    // Busca e Deleta o artigo
     await Article.findByIdAndRemove(id);
 
     return res.send();
   } catch (error) {
-    return res.status(404).send({ error: 'No article found with this id' + console.log(error) });
+    return res.status(404).send({ error: 'No article found with this id' });
   }
 };

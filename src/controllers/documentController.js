@@ -1,6 +1,10 @@
 const express = require('express');
 const Document = require('../models/Document');
 const Article = require('../models/Article');
+const path = require('path');
+const fs = require('fs');
+const util = require('util');
+const unlink = util.promisify(fs.unlink);
 
 // Upload de arquivos
 exports.uploadFile = async (req, res) => {
@@ -61,7 +65,9 @@ exports.findByTerm = async (req, res, next) => {
       .replace(/c/g, '[c,ç]');
   };  
   try {
+    // Recebe o parámetro pela query
     const urlParameter = req.query.term;
+    // Pagina o resultado
     const limit = parseInt(req.query.limit, 10) || 10;
     const page = parseInt(req.query.page, 10) || 1;
 
@@ -70,12 +76,12 @@ exports.findByTerm = async (req, res, next) => {
   
     // Validação de dados não vazios
     if (Object.keys(document).length === 0)
-      return res.status(404).send({ error: 'No documents were found with that term ' + console.log(error) });
+      return res.status(404).send({ error: 'No documents were found with that term' });
     else
-      return res.json(document + console.log(document));
+      return res.json(document);
 
   } catch (error) {
-    return res.status(400).send({ error: 'Error searching for document ' + console.log(error) });
+    return res.status(400).send({ error: 'Error searching for document' });
   }
 };
 
@@ -95,9 +101,9 @@ exports.updateFile = async (req, res) => {
       userId: req.userId,
       lastModification: Date.now()
     }, { new: true });
-    return res.json(document + console.log(document));
+    return res.json(document);
   } catch (error) {
-    return res.status(404).send({ error: 'A document with this id was not found: ' + console.log(error) });
+    return res.status(404).send({ error: 'A document with this id was not found' });
   }
 };
 
@@ -106,38 +112,50 @@ exports.findById = async (req, res) => {
   const id = req.params.id;
 
   try {
+    // Busca o documento por Id
     const document = await Document.findById(id);
 
     return res.json(document);
   } catch (error) {
-    return res.status(404).send({ error: 'A document with this id was not found' + console.log(document) });
+    return res.status(404).send({ error: 'A document with this id was not found' });
   }
 };
 
 // Busca todos os documentos paginado
 exports.findAll = async (req, res) => {
   try {
+    // Pagina o resultado
     const limit = parseInt(req.query.limit, 10) || 10;
     const page = parseInt(req.query.page, 10) || 1;
+
+    // Busca todos os documentos paginados
     const document = await Document.paginate({}, { limit, page });
 
     return res.json(document);
   } catch (error) {
-    return res.status(404).send({ error: 'A document with this id was not found' + console.log(document) });
+    return res.status(404).send({ error: 'A document with this id was not found' });
   }
 };
 
 // Deletar documentos
 exports.deleteDocument = async (req, res) => {
+  // Recebe o parámetro Id
   const id = req.params.id;
+  // Retorna o documento
+  const doc = await Document.findById(id);
+  // Retorna o endereço completo de salvamento do arquivo
+  const fileLocation = path.resolve(__dirname, '..', '..', 'tmp', 'uploads', doc.key);
 
   try {
+    // Deleta o documento do banco de dados
     await Document.findByIdAndRemove(id);
     // Deleta o artigo relacionado ao documento
-    await Article.remove({ documentId: id });
+    await Article.deleteMany({ documentId: id });
+    // Deleta o arquivo do local storage
+    await unlink(fileLocation);
 
     return res.send();
   } catch (error) {
-    return res.status(404).send({ error: 'No document found with this id' + console.log(error) });
+    return res.status(404).send({ error: 'No document found with this id' });
   }
 };

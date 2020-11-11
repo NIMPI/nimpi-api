@@ -9,7 +9,7 @@ APP_URL=http://localhost:3000
 DB_CONNECT = mongodb+srv://nimpi:nimpi@ifro-rvlrd.mongodb.net/nimpi?retryWrites=true&w=majority
 
 # Multer
-STORAGE_TYPE=s3
+STORAGE_TYPE=local
 
 # AWS
 AWS_ACESS_KEY_ID=AKIAV3RZBGVOD34U3ZFI

@@ -20,4 +20,4 @@ router.put('/publisher/:id', authController.verification, publisherController.up
 // Deletar autores
 router.delete('/publisher/:id', authController.verification, publisherController.deletePublisher);
 
-module.exports = router
+module.exports = router;
