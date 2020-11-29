@@ -152,7 +152,9 @@ exports.deleteDocument = async (req, res) => {
     // Deleta o artigo relacionado ao documento
     await Article.deleteMany({ documentId: id });
     // Deleta o arquivo do local storage
-    await unlink(fileLocation);
+    if (process.env.STORAGE_TYPE == local) {
+      await unlink(fileLocation); 
+    }
 
     return res.send();
   } catch (error) {

@@ -9,7 +9,7 @@ mongoose.connect(process.env.DB_CONNECT, {
     useCreateIndex: true,
     useFindAndModify: false
    }, () => {
-    console.log('Connected to DB!');
+    //console.log('Connected to DB!');
   });
 
 module.exports = mongoose;

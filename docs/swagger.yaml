@@ -778,6 +778,10 @@ definitions:
         type: "integer"
       type:
         type: "string"
+      key:
+        type: "string"
+      size:
+        type: "float"
       path:
         type: "string"
       dateCreated:
