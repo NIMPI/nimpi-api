@@ -48,7 +48,7 @@ exports.uploadFile = async (req, res) => {
 
     return res.json(document);
   } catch (error) {
-    return res.status(400).send({ error: 'Error creating new document' });
+    return res.status(400).send({ error: 'Error creating new document ' + console.log(error) });
   }
 };
 
@@ -114,7 +114,7 @@ exports.findById = async (req, res) => {
   try {
     // Busca o documento por Id
     const document = await Document.findById(id);
-
+    
     return res.json(document);
   } catch (error) {
     return res.status(404).send({ error: 'A document with this id was not found' });
